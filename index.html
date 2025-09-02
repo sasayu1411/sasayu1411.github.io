@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuto Sasaki</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ナビゲーション風のヘッダー */
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            background: rgba(250, 250, 250, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .exhibition-date {
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        /* メインコンテナ */
+        .main-container {
+            max-width: 1400px;
+            margin: 100px auto 0;
+            padding: 60px 40px;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 100px;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .title-ja {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .title-en {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            color: #333;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* セクションレイアウト */
+        .exhibition-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+
+        .section {
+            grid-column: span 6;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.6s forwards;
+        }
+
+        .section.full {
+            grid-column: span 12;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8em;
+            letter-spacing: 2px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            font-weight: 400;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* アイテムスタイル */
+        .item-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .item, .item-link {
+            padding: 25px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .item-link {
+            cursor: pointer;
+        }
+
+        .item:hover, .item-link:hover {
+            padding-left: 20px;
+            border-bottom-color: #1a1a1a;
+        }
+
+        .item-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .item-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-icon {
+            font-size: 0.8em;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .item:hover .item-icon, .item-link:hover .item-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .item-description {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        /* リンクインジケーター */
+        .item-link::after {
+            content: '↗';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .item-link:hover::after {
+            opacity: 1;
+            right: -30px;
+        }
+
+        /* フッター */
+        .museum-footer {
+            margin-top: 150px;
+            padding: 60px 0;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            font-weight: 400;
+            color: #1a1a1a;
+        }
+
+        /* 装飾的な要素 */
+        .decorative-line {
+            position: fixed;
+            width: 1px;
+            height: 100%;
+            background: #e0e0e0;
+            top: 0;
+            left: 50px;
+            z-index: -1;
+        }
+
+        .decorative-line.right {
+            left: auto;
+            right: 50px;
+        }
+
+        /* ドロップダウンリスト */
+        .dropdown-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-top: 15px;
+            margin-left: 40px;
+        }
+
+        .item.expanded .dropdown-list {
+            max-height: 300px;
+        }
+
+        .dropdown-item {
+            padding: 8px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item::before {
+            content: '・';
+            color: #999;
+        }
+
+        .expandable {
+            cursor: pointer;
+        }
+
+        .expandable .item-title::after {
+            content: '▼';
+            position: absolute;
+            right: 20px;
+            font-size: 0.6em;
+            transition: transform 0.3s;
+            opacity: 0.5;
+        }
+
+        .expandable.expanded .item-title::after {
+            transform: rotate(180deg);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 968px) {
+            .section {
+                grid-column: span 12;
+            }
+            
+            .decorative-line {
+                display: none;
+            }
+
+            .nav-header {
+                padding: 20px;
+            }
+
+            .main-container {
+                padding: 60px 20px;
+            }
+
+            .title-ja {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .item-link::after {
+                opacity: 1;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 装飾ライン -->
+    <div class="decorative-line"></div>
+    <div class="decorative-line right"></div>
+
+    <!-- ナビゲーション -->
+    <header class="nav-header">
+        <div class="nav-content">
+            <div class="logo">INTRODUCTION</div>
+            <div class="exhibition-date"></div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-container">
+        <!-- ヒーローセクション -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="title-ja">佐々木 悠人</h1>
+                <p class="title-en">YUTO SASAKI</p>
+                <p class="subtitle">公立はこだて未来大学</p>
+            </div>
+        </section>
+
+        <!-- Exhibition Grid -->
+        <div class="exhibition-grid">
+            <!-- 地元セクション -->
+            <section class="section">
+                <div class="section-number">01</div>
+                <h2 class="section-title">地元 / Hometown</h2>
+                <div class="item-grid">
+                    <a href="https://www.google.com/maps/place/旭川市" target="_blank" class="item-link">
+                        <div class="item-number">I</div>
+                        <div class="item-title">
+                            北海道旭川市
+                            <span class="item-icon">❄️</span>
+                        </div>
+                        <div class="item-description">
+                            Asahikawa City, Hokkaido
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 現在地セクション -->
+            <section class="section">
+                <div class="section-number">02</div>
+                <h2 class="section-title">現在地 / Current Location</h2>
+                <div class="item-grid">
+                    <a href="https://www.google.com/maps/place/函館市" target="_blank" class="item-link">
+                        <div class="item-number">I</div>
+                        <div class="item-title">
+                            北海道函館市
+                            <span class="item-icon">📍</span>
+                        </div>
+                        <div class="item-description">
+                            Hakodate City, Hokkaido
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 好きなもの・ことセクション -->
+            <section class="section full">
+                <div class="section-number">03</div>
+                <h2 class="section-title">好きなもの・こと / Interests</h2>
+                <div class="item-grid">
+                    <a href="https://instagram.com/__yuto_______" target="_blank" class="item-link">
+                        <div class="item-number">I</div>
+                        <div class="item-title">
+                            カメラ・写真撮影
+                            <span class="item-icon">📸</span>
+                        </div>
+                        <div class="item-description">
+                            Photography & Camera
+                        </div>
+                    </a>
+
+                    <a href="https://www.shinchosha.co.jp/special/naruten/" target="_blank" class="item-link">
+                        <div class="item-number">II</div>
+                        <div class="item-title">
+                            読書
+                            <span class="item-icon">📚</span>
+                        </div>
+                        <div class="item-description">
+                            Reading
+                        </div>
+                    </a>
+
+                    <div class="item">
+                        <div class="item-number">III</div>
+                        <div class="item-title">
+                            家具探し
+                            <span class="item-icon">🪑</span>
+                        </div>
+                        <div class="item-description">
+                            Furniture Hunting
+                        </div>
+                    </div>
+
+                    <a href="https://open.spotify.com/playlist/2UwOLEdwqNcLgxawBninek?si=f558e08e37f8428b" target="_blank" class="item-link">
+                        <div class="item-number">IV</div>
+                        <div class="item-title">
+                            音楽
+                            <span class="item-icon">🎵</span>
+                        </div>
+                        <div class="item-description">
+                            Music — 楽器は弾けないけど聴くのが大好きです
+                        </div>
+                    </a>
+                </div>
+            </section>
+            <!-- 地元紹介セクション - 旭川編 -->
+            <section class="section">
+                <div class="section-number">04</div>
+                <h2 class="section-title">地元紹介 - 旭川編 / Asahikawa</h2>
+                <div class="item-grid">
+                    <a href="https://www.city.asahikawa.hokkaido.jp/asahiyamazoo/" target="_blank" class="item-link">
+                        <div class="item-number">I</div>
+                        <div class="item-title">
+                            旭山動物園
+                            <span class="item-icon">🐧</span>
+                        </div>
+                        <div class="item-description">
+                            日本最北の動物園。行動展示の先駆け
+                        </div>
+                    </a>
+
+                    <div class="item expandable" onclick="this.classList.toggle('expanded')">
+                        <div class="item-number">II</div>
+                        <div class="item-title">
+                            旭川ラーメン
+                            <span class="item-icon">🍜</span>
+                        </div>
+                        <div class="item-description">
+                            醤油ベースの濃厚スープと縮れ麺
+                        </div>
+                        <div class="dropdown-list">
+                            <div class="dropdown-item">みづの</div>
+                            <div class="dropdown-item">よしの</div>
+                            <div class="dropdown-item">梅光軒</div>
+                            <div class="dropdown-item">山頭火</div>
+                            <div class="dropdown-item">天金</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 地元紹介セクション - 函館編 -->
+            <section class="section">
+                <div class="section-number">05</div>
+                <h2 class="section-title">地元紹介 - 函館編 / Hakodate</h2>
+                <div class="item-grid">
+                    <div class="item">
+                        <div class="item-number">I</div>
+                        <div class="item-title">
+                            函館山の夜景
+                            <span class="item-icon">🌃</span>
+                        </div>
+                        <div class="item-description">
+                            世界三大夜景の一つ
+                        </div>
+                    </div>
+
+                    <a href="https://luckypierrot.jp/" target="_blank" class="item-link">
+                        <div class="item-number">II</div>
+                        <div class="item-title">
+                            ラッキーピエロ
+                            <span class="item-icon">🍔</span>
+                        </div>
+                        <div class="item-description">
+                            函館限定のご当地バーガーチェーン
+                        </div>
+                    </a>
+
+                    <a href="https://www.hasesuto.co.jp/" target="_blank" class="item-link">
+                        <div class="item-number">III</div>
+                        <div class="item-title">
+                            ハセガワストア
+                            <span class="item-icon">🍱</span>
+                        </div>
+                        <div class="item-description">
+                            やきとり弁当が名物のコンビニ
+                        </div>
+                    </a>
+
+                    <div class="item">
+                        <div class="item-number">IV</div>
+                        <div class="item-title">
+                            旬菜旬魚たじま
+                            <span class="item-icon">🍣</span>
+                        </div>
+                        <div class="item-description">
+                            新鮮な海鮮と地元食材の名店
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
